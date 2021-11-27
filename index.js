@@ -9,24 +9,9 @@ const path = require('path')
 const PORT = process.env.PORT || 5000
 
 const app = express()
-app.use(function (req, res, next) {
-    var origins = [
-        'http://localhost:3000',
-        'https://happy-cooks.web.app'
-    ];
+const cors = require('cors')
 
-    for(var i = 0; i < origins.length; i++){
-        var origin = origins[i];
-
-        if(req.headers.origin.indexOf(origin) > -1){
-            res.header('Access-Control-Allow-Origin', req.headers.origin);
-        }
-    }
-
-    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-});
+app.use(cors({credentials: true, origin: true}))
 app.use(express.json())
 app.use(express.static(path.resolve(__dirname, 'static')))
 app.use(fileUpload({}))
