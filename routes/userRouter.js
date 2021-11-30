@@ -6,7 +6,7 @@ const checkRole = require("../middleware/checkRoleMiddleware");
 
 router.post('/registration', userController.registration)
 router.post('/login', userController.login)
-router.get('/auth', authMiddleware, userController.check)
+router.get('/auth', userController.check) //, authMiddleware
 router.delete('/', checkRole('ADMIN'), userController.delete)
 router.put('/edit-photo/:id', userController.editPhoto)
 
