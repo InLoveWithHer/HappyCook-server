@@ -1,4 +1,5 @@
-const {Book_recipes} = require("../models/models");
+const {Book_recipes, Type, Under_type} = require("../models/models");
+const ApiError = require("../error/ApiError");
 
 class bookRecipesController {
     async addOne(req, res) {
@@ -17,8 +18,17 @@ class bookRecipesController {
         return res.json(bookRecipe)
     }
 
-    async delete(req, res) {
-
+    async delete(req, res, next) {
+        const {recipeId, bookId} = req.body
+        const bookRecipe = (await Book_recipes.findOne({
+            where: {bookId: bookId, recipeId: recipeId},
+        }))
+        if (!bookRecipe) {
+            return next(ApiError.badRequest('Книги с таким ID нет.'))
+        } else {
+            await Book_recipes.destroy({where: {id: bookRecipe.id}})
+            return await res.sendStatus(200)
+        }
     }
 }
 
